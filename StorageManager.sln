@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2010
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorageManager", "StorageManager\StorageManager.csproj", "{3DE80EDB-FFAC-4D1A-9557-B0044085BC9C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorageManager.AzureTables", "StorageManager.AzureTables\StorageManager.AzureTables.csproj", "{F663F667-5F00-4297-9F0E-0003CD7627C1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		INT|Any CPU = INT|Any CPU
+		PRE|Any CPU = PRE|Any CPU
+		PROD|Any CPU = PROD|Any CPU
+		Release|Any CPU = Release|Any CPU
+		UAT|Any CPU = UAT|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3DE80EDB-FFAC-4D1A-9557-B0044085BC9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DE80EDB-FFAC-4D1A-9557-B0044085BC9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DE80EDB-FFAC-4D1A-9557-B0044085BC9C}.INT|Any CPU.ActiveCfg = INT|Any CPU
+		{3DE80EDB-FFAC-4D1A-9557-B0044085BC9C}.INT|Any CPU.Build.0 = INT|Any CPU
+		{3DE80EDB-FFAC-4D1A-9557-B0044085BC9C}.PRE|Any CPU.ActiveCfg = PRE|Any CPU
+		{3DE80EDB-FFAC-4D1A-9557-B0044085BC9C}.PRE|Any CPU.Build.0 = PRE|Any CPU
+		{3DE80EDB-FFAC-4D1A-9557-B0044085BC9C}.PROD|Any CPU.ActiveCfg = PROD|Any CPU
+		{3DE80EDB-FFAC-4D1A-9557-B0044085BC9C}.PROD|Any CPU.Build.0 = PROD|Any CPU
+		{3DE80EDB-FFAC-4D1A-9557-B0044085BC9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DE80EDB-FFAC-4D1A-9557-B0044085BC9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DE80EDB-FFAC-4D1A-9557-B0044085BC9C}.UAT|Any CPU.ActiveCfg = UAT|Any CPU
+		{3DE80EDB-FFAC-4D1A-9557-B0044085BC9C}.UAT|Any CPU.Build.0 = UAT|Any CPU
+		{F663F667-5F00-4297-9F0E-0003CD7627C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F663F667-5F00-4297-9F0E-0003CD7627C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F663F667-5F00-4297-9F0E-0003CD7627C1}.INT|Any CPU.ActiveCfg = Release|Any CPU
+		{F663F667-5F00-4297-9F0E-0003CD7627C1}.INT|Any CPU.Build.0 = Release|Any CPU
+		{F663F667-5F00-4297-9F0E-0003CD7627C1}.PRE|Any CPU.ActiveCfg = Release|Any CPU
+		{F663F667-5F00-4297-9F0E-0003CD7627C1}.PRE|Any CPU.Build.0 = Release|Any CPU
+		{F663F667-5F00-4297-9F0E-0003CD7627C1}.PROD|Any CPU.ActiveCfg = Release|Any CPU
+		{F663F667-5F00-4297-9F0E-0003CD7627C1}.PROD|Any CPU.Build.0 = Release|Any CPU
+		{F663F667-5F00-4297-9F0E-0003CD7627C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F663F667-5F00-4297-9F0E-0003CD7627C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F663F667-5F00-4297-9F0E-0003CD7627C1}.UAT|Any CPU.ActiveCfg = Release|Any CPU
+		{F663F667-5F00-4297-9F0E-0003CD7627C1}.UAT|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AEABF4C1-35C6-4B00-9EE9-CC6D73B6516A}
+	EndGlobalSection
+EndGlobal

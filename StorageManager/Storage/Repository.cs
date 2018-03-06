@@ -54,7 +54,7 @@ namespace StorageManager.Storage
             return entity;
         }
 
-        public virtual async Task<IEnumerable<T>> Upsert(IEnumerable<T> entities)
+        public virtual async Task<IEnumerable<T>> InsertOrUpdate(IEnumerable<T> entities)
         {
             var toUpsert = entities as T[] ?? entities.ToArray();
             List<T> result = new List<T>();

@@ -52,7 +52,7 @@ namespace StorageManager.Query
             var result = string.IsNullOrWhiteSpace(Context)
                 ? (StorageQueryResult<T>) AsyncHelpers.RunSync(() => StorageProvider.ExecuteAsync(Expression)) 
                 : (StorageQueryResult<T>) AsyncHelpers.RunSync(() => StorageProvider.ExecuteAsync(Context));
-            Context = result.Contexts;
+            Context = result.QueryContext;
             HasMoreResult = result.HasMoreResult;
             return result.Records.GetEnumerator();
         }
@@ -62,7 +62,7 @@ namespace StorageManager.Query
             var result = string.IsNullOrWhiteSpace(Context)
                 ? (StorageQueryResult<T>) await StorageProvider.ExecuteAsync(Expression).ConfigureAwait(false)
                 : (StorageQueryResult<T>) await StorageProvider.ExecuteAsync(Context).ConfigureAwait(false);
-            Context = result.Contexts;
+            Context = result.QueryContext;
             HasMoreResult = result.HasMoreResult;
             return result.Records;
         }
@@ -72,7 +72,7 @@ namespace StorageManager.Query
             var result = string.IsNullOrWhiteSpace(context) 
                 ? (StorageQueryResult<T>)await StorageProvider.ExecuteAsync(Expression).ConfigureAwait(false)
                 : (StorageQueryResult<T>)await StorageProvider.ExecuteAsync(Context).ConfigureAwait(false);
-            Context = result.Contexts;
+            Context = result.QueryContext;
             HasMoreResult = result.HasMoreResult;
             return result;
         }

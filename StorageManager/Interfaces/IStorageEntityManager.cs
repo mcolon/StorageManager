@@ -13,6 +13,7 @@ namespace StorageManager.Interfaces
         event Func<IStorageEntityManager<T>, T, Task> Updated;
         event Func<IStorageEntityManager<T>, T, Task<bool>> Deleting;
         event Func<IStorageEntityManager<T>, T, Task> Deleted;
+
         Task Insert(T entity);
         Task Insert(IEnumerable<T> entities);
         Task Update(T entity);
@@ -21,6 +22,7 @@ namespace StorageManager.Interfaces
         Task Upsert(IEnumerable<T> entities);
         Task Delete(T entity);
         Task Delete(IEnumerable<T> entities);
+
         IEnumerable<object> GetIdValues(T entity);
         Task<StorageQueryResult<T>> NextPageAsync(string token);
     }

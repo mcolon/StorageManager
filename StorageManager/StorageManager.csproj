@@ -1,8 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <VersionSufix>alpha</VersionSufix>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Miguel Colón García</Authors>
+    <Company>Miguel Colón García</Company>
+    <Description>Libreria base para el acceso de forma unificada a repositorios con independencia de la infraestructura</Description>
+    <Version>1.0.1-alpha</Version>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Storage\TableStorage\**" />
+    <EmbeddedResource Remove="Storage\TableStorage\**" />
+    <None Remove="Storage\TableStorage\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="Configuration\StorageConfiguration.cs" />

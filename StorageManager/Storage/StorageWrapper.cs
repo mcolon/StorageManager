@@ -50,7 +50,5 @@ namespace StorageManager.Storage
 
         public abstract Task<StorageQueryResult<T>> ExecuteQueryAsync(Expression expression);
         public abstract Task<StorageQueryResult<T>> ExecuteQueryAsync(string context, int? pageSize = null);
-        public abstract StorageQueryResult<T> ExecuteQuery(Expression expression);
-        public abstract StorageQueryResult<T> ExecuteQuery(string context, int? pageSize = null);
     }
 }

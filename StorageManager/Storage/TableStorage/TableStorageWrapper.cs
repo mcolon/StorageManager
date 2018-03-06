@@ -303,6 +303,7 @@ namespace StorageManager.Storage.TableStorage
             return result;
         }
 
+
         private byte[] ComputeDefinitionHash()
         {
             var bsonDefinition = BSonConvert.SerializeObject(EntityDefinition);
@@ -326,7 +327,7 @@ namespace StorageManager.Storage.TableStorage
                     var tbl = client.GetTableReference(EntityDefinition.TableName());
                     if (await tbl.ExistsAsync().ConfigureAwait(false))
                     {
-                        if (!CheckSchema(tbl))
+                        if (!await CheckSchema(tbl))
                         {
                             if (!EntityDefinition.AutoRebuildPartitionIfRequire)
                                 throw new StorageArgumentException("Schema table has changed or not exist");
@@ -348,40 +349,11 @@ namespace StorageManager.Storage.TableStorage
             return _table;
         }
 
-        private CloudTable Table()
-        {
-            if (_table == null)
-            {
-                _creatingTable.WaitOne();
-                CloudStorageAccount storageAccount = CloudStorageAccount.Parse(Configuration.StorageAccount);
-                CloudTableClient client = storageAccount.CreateCloudTableClient();
-
-                var tbl = client.GetTableReference(EntityDefinition.TableName());
-                if (tbl.Exists())
-                {
-                    if (!CheckSchema(tbl))
-                    {
-                        if (!EntityDefinition.AutoRebuildPartitionIfRequire)
-                            throw new StorageArgumentException("Schema table has changed or not exist");
-
-                        RebuildPartitions(tbl);
-                    }
-                }
-                else
-                {
-                    tbl.CreateIfNotExists();
-                    WriteSchema(tbl);
-                }
-                _table = tbl;
-                _creatingTable.Set();
-            }
-            return _table;
-        }
-
         private async Task RebuildPartitionsAsync(CloudTable tbl)
         {
             await Task.Delay(0).ConfigureAwait(false);
         }
+        
         private void RebuildPartitions(CloudTable tbl)
         {
             
@@ -389,10 +361,10 @@ namespace StorageManager.Storage.TableStorage
 
 
 
-        private bool CheckSchema(CloudTable table)
+        private async Task<bool> CheckSchema(CloudTable table)
         {
             var query = new TableQuery().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, SCHEMA_CONSTANT_STRING));
-            var result = table.ExecuteQuery(query).ToList();
+            var result = (await table.ExecuteQuerySegmentedAsync(query, null)).ToList();
             if (!result.Any())
                 return false;
 
@@ -413,37 +385,16 @@ namespace StorageManager.Storage.TableStorage
             await table.ExecuteAsync(TableOperation.InsertOrReplace(schema)).ConfigureAwait(false);
         }
 
-        private void WriteSchema(CloudTable table)
-        {
-            DeleteSchema(table);
-
-            DynamicTableEntity schema = new DynamicTableEntity(SCHEMA_CONSTANT_STRING, DateTime.UtcNow.ToString("s"));
-            var hashData = ComputeDefinitionHash();
-            var serializedField = EntityProperty.GeneratePropertyForByteArray(hashData);
-
-            schema.Properties.Add("Content", serializedField);
-            table.Execute(TableOperation.InsertOrReplace(schema));
-        }
 
         private async Task DeleteSchemaAsync(CloudTable table)
         {
-            var query = new TableQuery().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, SCHEMA_CONSTANT_STRING));
-            var result = table.ExecuteQuery(query);
+            TableQuery query = new TableQuery().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, SCHEMA_CONSTANT_STRING));
+            
+            var result = await table.ExecuteQuerySegmentedAsync(query,null);
 
             foreach (var schemadefinition in result)
             {
                 await table.ExecuteAsync(TableOperation.Delete(schemadefinition)).ConfigureAwait(false);
-            }
-        }
-
-        private void DeleteSchema(CloudTable table)
-        {
-            var query = new TableQuery().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, SCHEMA_CONSTANT_STRING));
-            var result = table.ExecuteQuery(query);
-
-            foreach (var schemadefinition in result)
-            {
-                table.Execute(TableOperation.Delete(schemadefinition));
             }
         }
 
@@ -469,6 +420,8 @@ namespace StorageManager.Storage.TableStorage
             }
             await Task.WhenAll(resultTasks).ConfigureAwait(false);
         }
+
+
 
 
 
@@ -516,56 +469,5 @@ namespace StorageManager.Storage.TableStorage
                 HasMoreResult = queryContext.HasMoreResult
             };
         }
-
-
-
-
-        public override StorageQueryResult<T> ExecuteQuery(Expression expression)
-        {
-            var translator = new TableStorageQueryTranslator<T>(EntityDefinition);
-            var toExecute = translator.Translate(expression);
-            return ExecuteQuery(toExecute);
-        }
-
-        public override StorageQueryResult<T> ExecuteQuery(string context, int? pageSize = null)
-        {
-            var queryContext = TableStorageQueryContext.Create(context, pageSize);
-            return ExecuteQuery(queryContext);
-        }
-
-        private StorageQueryResult<T> ExecuteQuery(TableQuery query)
-        {
-            var context = new TableStorageQueryContext
-            {
-                ContinuationInfo = new TableStorageContinuationInfo
-                {
-                    Query = query,
-                    PageSize = query.TakeCount ?? DEFAULT_PAGE_SIZE,
-                    HasMoreResult = true
-                },
-            };
-            return ExecuteQuery(context);
-        }
-
-        private StorageQueryResult<T> ExecuteQuery(TableStorageQueryContext queryContext)
-        {
-            var table = Table();
-            var continuationInfos = new List<TableStorageContinuationInfo>();
-
-            var result = table.ExecuteQuerySegmented(queryContext.ContinuationInfo.Query, queryContext.ContinuationInfo.ContinuationToken);
-            queryContext.ContinuationInfo.ContinuationToken = result.ContinuationToken;
-            queryContext.ContinuationInfo.HasMoreResult = result.ContinuationToken != null;
-            var records = result.Results.Select(d => BSonConvert.DeserializeObject<T>(d.Properties["Content"].BinaryValue));
-
-            return new StorageQueryResult<T>
-            {
-                Contexts = BSonConvert.SerializeToBase64String(queryContext),
-                Records = records,
-                HasMoreResult = queryContext.HasMoreResult
-            };
-        }
-
-
-
     }
 }

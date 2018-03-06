@@ -44,7 +44,11 @@ namespace StorageManager.Helpers
             {
                 return FindIEnumerable(seqType.BaseType);
             }
+
             return null;
         }
     }
 }
+
+
+    

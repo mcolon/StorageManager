@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using StorageManager.Configuration;
+using StorageManager.Helpers;
 using StorageManager.Interfaces;
 using StorageManager.Query;
 
@@ -109,29 +110,14 @@ namespace StorageManager.Storage
 
         public override object Execute(Expression expression)
         {
-            var result = Wrapper.ExecuteQuery(expression);
-            return result;
-        }
+            return AsyncHelpers.RunSync(() => ExecuteAsync(expression));
 
-        public override object Execute(string queryContext)
-        {
-            return Wrapper.ExecuteQueryAsync(queryContext);
         }
 
         public override TResult Execute<TResult>(Expression expression)
         {
-            var result = Execute(expression);
-            if (typeof(TResult) == typeof(T))
-            {
-                if (result is StorageQueryResult<T> r)
-                {
-                    var record = r.Records.FirstOrDefault();
-                    return record == null ? default(TResult) : (TResult)Convert.ChangeType(record, typeof(TResult));
-                }
-            }
-            return (TResult)result;
+            return AsyncHelpers.RunSync(() => ExecuteAsync<TResult>(expression));
         }
-
 
         public override async Task<object> ExecuteAsync(Expression expression)
         {

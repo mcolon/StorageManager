@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using StorageManager.Helpers;
 using StorageManager.Interfaces;
 
 namespace StorageManager.Query
@@ -49,8 +50,8 @@ namespace StorageManager.Query
         public IEnumerator<T> GetEnumerator()
         {
             var result = string.IsNullOrWhiteSpace(Context)
-                ? (StorageQueryResult<T>)StorageProvider.Execute(Expression)
-                : (StorageQueryResult<T>)StorageProvider.Execute(Context);
+                ? (StorageQueryResult<T>) AsyncHelpers.RunSync(() => StorageProvider.ExecuteAsync(Expression)) 
+                : (StorageQueryResult<T>) AsyncHelpers.RunSync(() => StorageProvider.ExecuteAsync(Context));
             Context = result.Contexts;
             HasMoreResult = result.HasMoreResult;
             return result.Records.GetEnumerator();

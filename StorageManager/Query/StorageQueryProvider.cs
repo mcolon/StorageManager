@@ -31,11 +31,16 @@ namespace StorageManager.Query
             return new StorageQueryable<TK>(this, expression);
         }
 
+
+
+
+
         public abstract object Execute(Expression expression);
 
-        public abstract object Execute(string queryContext);
-
         public abstract TResult Execute<TResult>(Expression expression);
+
+
+
 
 
         public abstract Task<object> ExecuteAsync(Expression expression);

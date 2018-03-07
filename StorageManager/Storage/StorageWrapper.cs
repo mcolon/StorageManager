@@ -20,13 +20,10 @@ namespace StorageManager.Storage
         protected readonly StorageEntityDefinition<T> EntityDefinition;
         protected IStorageConfiguration Configuration;
 
-        public StorageEntityManager<T> Provider { get; }
-
-        protected StorageWrapper(StorageEntityDefinition<T> definition, IStorageConfiguration configuration, StorageEntityManager<T> provider)
+        protected StorageWrapper(StorageEntityDefinition<T> definition, IStorageConfiguration configuration)
         {
             EntityDefinition = definition;
             Configuration = configuration;
-            Provider = provider;
         }
 
         public abstract Task Insert(T entity);
@@ -35,7 +32,7 @@ namespace StorageManager.Storage
 
         public abstract Task Delete(T entity);
 
-        public abstract Task Upsert(T entity);
+        public abstract Task InsertOrReplaceUpsertUpsert(T entity);
 
 
         public abstract Task Insert(IEnumerable<T> entity);
@@ -44,7 +41,7 @@ namespace StorageManager.Storage
 
         public abstract Task Delete(IEnumerable<T> entity);
 
-        public abstract Task Upsert(IEnumerable<T> entity);
+        public abstract Task InsertOrReplaceUpsertUpsert(IEnumerable<T> entity);
 
 
 

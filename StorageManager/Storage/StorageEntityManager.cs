@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 using StorageManager.Configuration;
 using StorageManager.Helpers;
@@ -25,11 +26,11 @@ namespace StorageManager.Storage
         public event Func<IStorageEntityManager<T>, T, Task<bool>> Deleting;
         public event Func<IStorageEntityManager<T>, T, Task> Deleted;
 
-        public StorageEntityManager(StorageEntityDefinition<T> definition, IStorageConfiguration configuration, StorageWrapper<T> wrapper)
+        public StorageEntityManager(StorageEntityDefinition<T> definition, IStorageConfiguration configuration)
         {
             EntityDefinition = definition;
-            Wrapper = wrapper;
-            Queryable = new StorageQueryable<T>(Wrapper.Provider);
+            Wrapper = StorageWrapperFactory.GetWrapper(definition, configuration);
+            Queryable = new StorageQueryable<T>(this);
             Configuration = configuration;
         }
 
@@ -50,14 +51,14 @@ namespace StorageManager.Storage
             await Task.WhenAll(tasks).ConfigureAwait(false);
         }
 
-        public async Task Upsert(T entity)
+        public async Task InsertOrReplaceUpsert(T entity)
         {
-            await Wrapper.Upsert(entity).ConfigureAwait(false);
+            await Wrapper.InsertOrReplaceUpsertUpsert(entity).ConfigureAwait(false);
         }
 
-        public async Task Upsert(IEnumerable<T> entities)
+        public async Task InsertOrReplaceUpsert(IEnumerable<T> entities)
         {
-            IEnumerable<Task> tasks = entities.Select(async e => await Upsert(e));
+            IEnumerable<Task> tasks = entities.Select(async e => await InsertOrReplaceUpsert(e));
             await Task.WhenAll(tasks).ConfigureAwait(false);
         }
 

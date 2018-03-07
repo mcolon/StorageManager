@@ -8,6 +8,7 @@ namespace StorageManager.Storage
 {
     public static class StorageWrapperFactory
     {
+
         private static readonly Dictionary<StorageType,Type> RegisteredWrappers = new Dictionary<StorageType, Type>();
 
         public static StorageWrapper<T> GetWrapper<T>(StorageEntityDefinition<T> definition, IStorageConfiguration configuration)
@@ -18,11 +19,26 @@ namespace StorageManager.Storage
             return (StorageWrapper<T>) Activator.CreateInstance(RegisteredWrappers[definition.StorageType], definition, configuration);
         }
 
-        public static void RegisterWrapper<T>(StorageType type) where T : StorageWrapper
+        public static void RegisterWrapper<T>(StorageType storageType) where T : StorageWrapper
         {
-            if (RegisteredWrappers.ContainsKey(type))
+            var type = typeof(T);
+            
+            if(!typeof(StorageWrapper).IsAssignableFrom(type) || !type.IsGenericType)
+                throw new StorageInvalidOperationException($"Cant use type: {type.Name} as StorageWrapper");
+
+            if (RegisteredWrappers.ContainsKey(storageType))
+                throw new StorageInvalidOperationException($"Already registered wrapper for storage type: {storageType}");
+            RegisteredWrappers.Add(storageType, typeof(T) );
+        }
+
+        public static void RegisterWrapper(StorageType storageType, Type type) 
+        {
+            if(!typeof(StorageWrapper).IsAssignableFrom(type) || !type.IsGenericType)
+                throw new StorageInvalidOperationException($"Cant use type: {type.Name} as StorageWrapper");
+
+            if (RegisteredWrappers.ContainsKey(storageType))
                 throw new StorageInvalidOperationException($"Already registered wrapper for storage type: {type}");
-            RegisteredWrappers.Add(type, typeof(T) );
+            RegisteredWrappers.Add(storageType, type );
         }
     }
 }

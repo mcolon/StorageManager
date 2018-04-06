@@ -3,8 +3,6 @@ using System.Threading.Tasks;
 using StorageManager.Configuration;
 using StorageManager.Query;
 using System.Linq.Expressions;
-using StorageManager.Enums;
-using StorageManager.Exceptions;
 
 namespace StorageManager.Storage
 {
@@ -32,7 +30,7 @@ namespace StorageManager.Storage
 
         public abstract Task Delete(T entity);
 
-        public abstract Task InsertOrReplaceUpsertUpsert(T entity);
+        public abstract Task InsertOrUpdate(T entity);
 
 
         public abstract Task Insert(IEnumerable<T> entity);
@@ -41,7 +39,7 @@ namespace StorageManager.Storage
 
         public abstract Task Delete(IEnumerable<T> entity);
 
-        public abstract Task InsertOrReplaceUpsertUpsert(IEnumerable<T> entity);
+        public abstract Task InsertOrUpdate(IEnumerable<T> entity);
 
 
 

@@ -115,11 +115,5 @@ namespace StorageManager.Storage
         {
             return string.IsNullOrWhiteSpace(Name) ? typeof(T).Name : Name;
         }
-
-        public Dictionary<string, IEnumerable<string>> GetPartitionsValues(T entity)
-        {
-            return _partitions.Where(p => !string.IsNullOrWhiteSpace(p.Name)).ToDictionary(k => k.Name, v => v.Expressions.Select(e => StorageQueryBuilder.NormalizeStringValue(e.Evaluate(entity) ?? "NULL")));
-        }
-
     }
 }

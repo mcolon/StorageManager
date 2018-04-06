@@ -16,7 +16,10 @@ namespace StorageManager.Storage
             if(!RegisteredWrappers.ContainsKey(definition.StorageType))
                 throw new StorageArgumentException($"Not found wrapper for storage type: {definition.StorageType}");
 
-            return (StorageWrapper<T>) Activator.CreateInstance(RegisteredWrappers[definition.StorageType], definition, configuration);
+            var genericType = RegisteredWrappers[definition.StorageType];
+            var storageWrapperType = genericType.MakeGenericType(typeof(T));
+
+            return (StorageWrapper<T>) Activator.CreateInstance(storageWrapperType, definition, configuration);
         }
 
         public static void RegisterWrapper<T>(StorageType storageType) where T : StorageWrapper
@@ -28,6 +31,7 @@ namespace StorageManager.Storage
 
             if (RegisteredWrappers.ContainsKey(storageType))
                 throw new StorageInvalidOperationException($"Already registered wrapper for storage type: {storageType}");
+
             RegisteredWrappers.Add(storageType, typeof(T) );
         }
 

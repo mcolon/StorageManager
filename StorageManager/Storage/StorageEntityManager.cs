@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Threading;
 using System.Threading.Tasks;
 using StorageManager.Configuration;
 using StorageManager.Helpers;
@@ -51,14 +50,14 @@ namespace StorageManager.Storage
             await Task.WhenAll(tasks).ConfigureAwait(false);
         }
 
-        public async Task InsertOrReplaceUpsert(T entity)
+        public async Task InsertOrUpdate(T entity)
         {
-            await Wrapper.InsertOrReplaceUpsertUpsert(entity).ConfigureAwait(false);
+            await Wrapper.InsertOrUpdate(entity).ConfigureAwait(false);
         }
 
-        public async Task InsertOrReplaceUpsert(IEnumerable<T> entities)
+        public async Task InsertOrUpdate(IEnumerable<T> entities)
         {
-            IEnumerable<Task> tasks = entities.Select(async e => await InsertOrReplaceUpsert(e));
+            IEnumerable<Task> tasks = entities.Select(async e => await InsertOrUpdate(e));
             await Task.WhenAll(tasks).ConfigureAwait(false);
         }
 

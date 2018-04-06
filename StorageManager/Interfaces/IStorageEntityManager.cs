@@ -18,8 +18,8 @@ namespace StorageManager.Interfaces
         Task Insert(IEnumerable<T> entities);
         Task Update(T entity);
         Task Update(IEnumerable<T> entities);
-        Task InsertOrReplaceUpsert(T entity);
-        Task InsertOrReplaceUpsert(IEnumerable<T> entities);
+        Task InsertOrUpdate(T entity);
+        Task InsertOrUpdate(IEnumerable<T> entities);
         Task Delete(T entity);
         Task Delete(IEnumerable<T> entities);
 

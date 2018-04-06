@@ -48,9 +48,9 @@ namespace StorageManager.Storage
             return result;
         }
 
-        public virtual async Task<T> InsertOrReplaceUpsert(T entity)
+        public virtual async Task<T> InsertOrUpdate(T entity)
         {
-            await Storage.InsertOrReplaceUpsert(entity).ConfigureAwait(false);
+            await Storage.InsertOrUpdate(entity).ConfigureAwait(false);
             return entity;
         }
 
@@ -59,7 +59,7 @@ namespace StorageManager.Storage
             var toUpsert = entities as T[] ?? entities.ToArray();
             List<T> result = new List<T>();
             foreach (var entity in toUpsert)
-                result.Add(await InsertOrReplaceUpsert(entity).ConfigureAwait(false));
+                result.Add(await InsertOrUpdate(entity).ConfigureAwait(false));
             return result;
         }
 

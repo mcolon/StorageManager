@@ -30,9 +30,9 @@ namespace StorageManager.Storage
                 throw new StorageInvalidOperationException($"Cant use type: {type.Name} as StorageWrapper");
 
             if (RegisteredWrappers.ContainsKey(storageType))
-                throw new StorageInvalidOperationException($"Already registered wrapper for storage type: {storageType}");
-
-            RegisteredWrappers.Add(storageType, typeof(T) );
+                RegisteredWrappers[storageType] = type;
+            else
+                RegisteredWrappers.Add(storageType, type );
         }
 
         public static void RegisterWrapper(StorageType storageType, Type type) 
@@ -41,8 +41,9 @@ namespace StorageManager.Storage
                 throw new StorageInvalidOperationException($"Cant use type: {type.Name} as StorageWrapper");
 
             if (RegisteredWrappers.ContainsKey(storageType))
-                throw new StorageInvalidOperationException($"Already registered wrapper for storage type: {type}");
-            RegisteredWrappers.Add(storageType, type );
+                RegisteredWrappers[storageType] = type;
+            else
+                RegisteredWrappers.Add(storageType, type );
         }
     }
 }

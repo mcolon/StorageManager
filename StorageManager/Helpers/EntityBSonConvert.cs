@@ -60,7 +60,8 @@ namespace StorageManager.Helpers
                     NullValueHandling = NullValueHandling.Ignore,
                     DateTimeZoneHandling = DateTimeZoneHandling.Utc,
                     DateParseHandling = DateParseHandling.DateTime,
-                    TypeNameHandling = TypeNameHandling.Auto
+                    TypeNameHandling = TypeNameHandling.Auto,
+                    TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple
                 };
 
                 using (BsonDataReader reader = new BsonDataReader(ms, false, DateTimeKind.Utc))

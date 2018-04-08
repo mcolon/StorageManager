@@ -7,7 +7,7 @@
     <Authors>Miguel Colón García</Authors>
     <Company>Miguel Colón García</Company>
     <Description>Libreria base para el acceso de forma unificada a repositorios con independencia de la infraestructura</Description>
-    <Version>1.0.6-alpha</Version>
+    <Version>1.0.7-alpha</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.4.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="Newtonsoft.Json.Bson" Version="1.0.1" />
   </ItemGroup>
 
